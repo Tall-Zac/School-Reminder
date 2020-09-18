@@ -19,37 +19,16 @@ webbrowser.register('chrome',
 
 #timeout plan
 def Timeout():
-    #setup server
+    port = 465  # For SSL
     smtp_server = "smtp.gmail.com"
-    port = 587  # For starttls
-
-    #login
-    sender_email = "JasonTheHelper@gmail.com"
+    sender_email = "JasonTheHelper@gmail.com"  # Enter your address
+    receiver_email = "5413404251@vtext.com"  # Enter receiver address
     password = "Revier917"
 
-    #define message and recpipant
-    receiver_email = "5413404251@vtext.com"
-    message = """\
-    Class starts soon, get cracking
-    """
-
-    # Create a secure SSL context
     context = ssl.create_default_context()
-
-    # Try to log in to server and send email
-    try:
-        server = smtplib.SMTP(smtp_server,port)
-        server.ehlo() # Can be omitted
-        server.starttls(context=context) # Secure the connection
-        server.ehlo() # Can be omitted
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
         server.login(sender_email, password)
-        # TODO: Send email here
         server.sendmail(sender_email, receiver_email, message)
-    except Exception as e:
-        # Print any error messages to stdout
-        print(e)
-    finally:
-        server.quit()
     print("No response, sending timeout message")
 
 
@@ -59,7 +38,7 @@ def Meet0():
     print("Sent")
     x = 1
 
-#make the GUI function#
+#make the GUI function for Sending to class#
 def GUI():
     class Application(tk.Frame):
         def __init__(self, master=None):
@@ -87,6 +66,37 @@ def GUI():
     app = Application(master=root)
     app.mainloop()
 
+#check program with GUI
+def CheckGUI():
+    class Application(tk.Frame):
+        def __init__(self, master=None):
+            super().__init__(master)
+            self.master = master
+            self.pack()
+            self.create_widgets()
+
+        def create_widgets(self):
+            self.hi_there = tk.Button(self)
+            self.hi_there["text"] = "Confirm"
+            self.hi_there["command"] = self.say_hi
+            self.hi_there.pack(side="top")
+
+            self.quit = tk.Button(self, text="Fine", fg="red",
+                                  command=self.master.destroy)
+
+            self.quit.pack(side="bottom")
+
+        def say_hi(self):
+            print("Thank you")
+
+#Confirm program is running
+message = """\
+Confirming program is running"""
+Timeout()
+
+
+
+
 #End Result
 while True:
     # finds current time
@@ -101,6 +111,9 @@ while True:
         break
 # No resonse
     if (now >= future) and (x<=0):
+        message = """\
+        Get To Class
+        """
         Timeout()
         x=1
 
